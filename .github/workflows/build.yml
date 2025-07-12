@@ -500,18 +500,12 @@ jobs:
         id: branch-name
         uses: tj-actions/branch-names@v7
 
-      - name: Upload artifact
+      - name: Upload combined artifact
         if: ${{ github.event_name != 'pull_request' }}
-        uses: wangyucode/sftp-upload-action@v1.4.8
+        uses: actions/upload-artifact@v4
         with:
-          host: ${{ secrets.NICKCHAN_FTP_HOST }}
-          port: ${{ secrets.NICKCHAN_FTP_PORT }}
-          username: palera1n
-          password: ${{ secrets.NICKCHAN_FTP_PASS }}
-          forceUpload: true
-          dryRun: false
-          localDir: 'ready/'
-          remoteDir: "/palera1n/artifacts/c-rewrite/${{ steps.branch-name.outputs.ref_branch || github.ref_name }}/${{ github.run_number }}"
+          name: full-artifact-${{ matrix.os }}-${{ matrix.arch }}-${{ github.run_number }}
+          path: ready/
 
   build-Linux:
     strategy:
